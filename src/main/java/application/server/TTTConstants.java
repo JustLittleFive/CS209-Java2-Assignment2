@@ -8,4 +8,6 @@ public interface TTTConstants {
   public static int DRAW = 3;
   public static int CONTINUE = 4;
   public static int MATCH_START = 22;
+  public static int CONNECT_LOSE = 44;
+  public static int SERVER_CLOSE = 99;
 }

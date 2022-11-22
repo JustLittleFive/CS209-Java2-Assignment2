@@ -1,9 +1,9 @@
 package application;
 
+import application.client.PlayerClient;
 import java.io.IOException;
 // import java.io.*;
 // import java.net.*;
-import application.client.PlayerClient;
 import javafx.application.Application;
 // import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -30,7 +30,6 @@ public class Main extends Application {
         try {
           player.initPlayer(primaryStage);
         } catch (IOException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
       });
