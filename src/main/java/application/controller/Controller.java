@@ -283,9 +283,15 @@ public class Controller implements Initializable {
         refreshBoard("Server close!");
         return;
       } catch (IOException e) {
-        e.printStackTrace();
+        System.out.println("Stream close!");
+        // StatusBar.setTitleText("Opponent won!");
+        refreshBoard("Stream close!");
+        return;
       } catch (InterruptedException e) {
-        e.printStackTrace();
+        System.out.println("Game interrupted!");
+        // StatusBar.setTitleText("Opponent won!");
+        refreshBoard("Game interrupted!");
+        return;
       }
     }
 
@@ -364,14 +370,7 @@ public class Controller implements Initializable {
         // StatusBar.setTitleText("Opponent won!");
         refreshBoard("Opponent disconnect!");
         return;
-      } else if (status == SERVER_CLOSE) {
-        continueToPlay = false;
-        System.out.println("Server close!");
-        // StatusBar.setTitleText("Opponent won!");
-        refreshBoard("Server close!");
-        return;
-      } 
-      else {
+      } else {
         continueToPlay = true;
         System.out.print("Is my turn? ");
         System.out.println(myTurn);
@@ -393,6 +392,7 @@ public class Controller implements Initializable {
       int column = fromServer.readInt();
       System.out.print(column);
       while (!refreshBoard(row, column)) {
+        refreshBoard("Data not sync!");
         System.err.println("Data not sync!");
       }
       System.out.println("Reveived movement.");

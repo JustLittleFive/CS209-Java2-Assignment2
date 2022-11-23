@@ -27,9 +27,7 @@ public class TTTServer extends JFrame implements TTTConstants {
     addWindowListener(
         new WindowListener() {
         @Override
-        public void windowOpened(java.awt.event.WindowEvent e) {
-
-        }
+        public void windowOpened(java.awt.event.WindowEvent e) {}
 
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
@@ -43,27 +41,19 @@ public class TTTServer extends JFrame implements TTTConstants {
         }
 
         @Override
-        public void windowClosed(java.awt.event.WindowEvent e) {
-
-        }
+        public void windowClosed(java.awt.event.WindowEvent e) {}
 
         @Override
-        public void windowIconified(java.awt.event.WindowEvent e) {
-
-        }
+        public void windowIconified(java.awt.event.WindowEvent e) {}
 
         @Override
-        public void windowDeiconified(java.awt.event.WindowEvent e) {
-
-        }
+        public void windowDeiconified(java.awt.event.WindowEvent e) {}
 
         @Override
-        public void windowActivated(java.awt.event.WindowEvent e) {
-        }
+        public void windowActivated(java.awt.event.WindowEvent e) {}
 
         @Override
-        public void windowDeactivated(java.awt.event.WindowEvent e) {
-        }
+        public void windowDeactivated(java.awt.event.WindowEvent e) {}
       }
     );
     ////////////////////////////
@@ -130,15 +120,15 @@ class MatchSession implements Runnable, TTTConstants { // match running session
   private DataInputStream fromPlayer2;
   private DataOutputStream toPlayer2;
 
-  private static final int[][] chessBoard = new int[3][3];
+  private int[][] chessBoard = new int[3][3];
 
   // private static final boolean[][] flag = new boolean[3][3];
 
   public MatchSession(Socket player1, Socket player2) {
     this.player1 = player1;
     this.player2 = player2;
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
         chessBoard[i][j] =
           -1;
       }
@@ -162,14 +152,6 @@ class MatchSession implements Runnable, TTTConstants { // match running session
         // send token (is player as player1 or player2)
         toPlayer1.writeInt(PLAY_1);
         toPlayer2.writeInt(PLAY_2);
-      } else {
-        // send token (is player as player1 or player2) ANYWAY
-        toPlayer1.writeInt(PLAY_1);
-        toPlayer2.writeInt(PLAY_2);
-        toPlayer1.writeInt(DRAW);
-        toPlayer2.writeInt(DRAW);
-        System.out.println("Match closed");
-        return;
       }
 
       while (true) {
@@ -196,6 +178,9 @@ class MatchSession implements Runnable, TTTConstants { // match running session
         System.out.print("Player1 take ");
         int[] out = { row, column };
         System.out.println(Arrays.toString(out));
+        // if (chessBoard[row][column] == -1) {
+        //   chessBoard[row][column] = PLAY_1;
+        // }
         chessBoard[row][column] = PLAY_1;
 
         // step2: check if player1 is win or draw match
@@ -286,9 +271,9 @@ class MatchSession implements Runnable, TTTConstants { // match running session
       ex.printStackTrace();
       if (!player1.isClosed()) {
         try {
-          toPlayer1.writeInt(SERVER_CLOSE);
-          toPlayer1.writeInt(SERVER_CLOSE);
-          toPlayer1.writeInt(SERVER_CLOSE);
+          toPlayer1.writeInt(CONNECT_LOSE);
+          toPlayer1.writeInt(CONNECT_LOSE);
+          toPlayer1.writeInt(CONNECT_LOSE);
           player1.close();
         } catch (IOException e) {
           e.printStackTrace();
@@ -296,9 +281,9 @@ class MatchSession implements Runnable, TTTConstants { // match running session
       }
       if (!player2.isClosed()) {
         try {
-          toPlayer2.writeInt(SERVER_CLOSE);
-          toPlayer2.writeInt(SERVER_CLOSE);
-          toPlayer2.writeInt(SERVER_CLOSE);
+          toPlayer2.writeInt(CONNECT_LOSE);
+          toPlayer2.writeInt(CONNECT_LOSE);
+          toPlayer2.writeInt(CONNECT_LOSE);
           player2.close();
         } catch (IOException e) {
           e.printStackTrace();
@@ -316,14 +301,10 @@ class MatchSession implements Runnable, TTTConstants { // match running session
   }
 
   private boolean isFull() { // panel full check
-    for (int i = 0; i < 2; i++) {
-      {
-        for (int j = 0; j < 2; j++) {
-          {
-            if (chessBoard[i][j] == -1) {
-              return false;
-            }
-          }
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
+        if (chessBoard[i][j] == -1) {
+          return false;
         }
       }
     }
@@ -331,20 +312,26 @@ class MatchSession implements Runnable, TTTConstants { // match running session
   }
 
   private boolean isWon(int token) { // win check
-    for (int i = 0; i < 2; i++) {
-      {
-        if ((chessBoard[i][0] == token) && (chessBoard[i][1] == token)
-            && (chessBoard[i][2] == token)) {
-          return true;
-        }
+    for (int i = 0; i < 3; i++) {
+      if (
+          (chessBoard[i][0] == token) 
+          &&
+          (chessBoard[i][1] == token) 
+          &&
+          (chessBoard[i][2] == token)
+      ) {
+        return true;
       }
     }
-    for (int i = 0; i < 2; i++) {
-      {
-        if ((chessBoard[0][i] == token) && (chessBoard[1][i] == token)
-            && (chessBoard[2][i] == token)) {
-          return true;
-        }
+    for (int i = 0; i < 3; i++) {
+      if (
+          (chessBoard[0][i] == token) 
+          &&
+          (chessBoard[1][i] == token) 
+          &&
+          (chessBoard[2][i] == token)
+      ) {
+        return true;
       }
     }
     if (
