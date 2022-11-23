@@ -248,7 +248,7 @@ class MatchSession implements Runnable, TTTConstants { // match running session
         System.out.println(Arrays.toString(out1));
         if (chessBoard[row][column] == -1) {
           chessBoard[row][column] = PLAY_2;
-        } else {}
+        }
         // step2: check if player2 is win or draw match
         if (isWon(PLAY_2)) {
           toPlayer1.writeInt(PLAYER2_WON);
@@ -287,6 +287,8 @@ class MatchSession implements Runnable, TTTConstants { // match running session
       if (!player1.isClosed()) {
         try {
           toPlayer1.writeInt(SERVER_CLOSE);
+          toPlayer1.writeInt(SERVER_CLOSE);
+          toPlayer1.writeInt(SERVER_CLOSE);
           player1.close();
         } catch (IOException e) {
           e.printStackTrace();
@@ -294,6 +296,8 @@ class MatchSession implements Runnable, TTTConstants { // match running session
       }
       if (!player2.isClosed()) {
         try {
+          toPlayer2.writeInt(SERVER_CLOSE);
+          toPlayer2.writeInt(SERVER_CLOSE);
           toPlayer2.writeInt(SERVER_CLOSE);
           player2.close();
         } catch (IOException e) {

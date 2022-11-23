@@ -42,7 +42,7 @@ public class PlayerClient implements TTTConstants {
           } catch (IOException e) {
             e.printStackTrace();
           }
-          System.out.print("监听到窗口关闭");
+          System.out.print("Window closed.");
         }
       }
     );

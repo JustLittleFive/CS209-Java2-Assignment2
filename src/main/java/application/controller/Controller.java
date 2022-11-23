@@ -277,8 +277,15 @@ public class Controller implements Initializable {
             sendMove();
           }
         }
-      } catch (Exception ex) {
-        ex.printStackTrace();
+      } catch (SocketException ex) {
+        System.out.println("Server close!");
+        // StatusBar.setTitleText("Opponent won!");
+        refreshBoard("Server close!");
+        return;
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
     }
 
@@ -363,7 +370,8 @@ public class Controller implements Initializable {
         // StatusBar.setTitleText("Opponent won!");
         refreshBoard("Server close!");
         return;
-      } else {
+      } 
+      else {
         continueToPlay = true;
         System.out.print("Is my turn? ");
         System.out.println(myTurn);
